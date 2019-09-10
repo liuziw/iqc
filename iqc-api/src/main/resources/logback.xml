@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <property name="log.filePath" value="E:\\log\\iqc" />
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-40.40logger{39} : %m%n</pattern>
+        </layout>
+    </appender>
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-40.40logger{39} : %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${log.filePath}/iqc_info.%d.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-40.40logger{39} : %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${log.filePath}/iqc_error.%d.log</fileNamePattern>
+            <!-- 每产生一个日志文件，该日志文件的保存期限为30天 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 异步输出 （异步输出可大幅提高性能） -->
+    <appender name="ASYNC-INFO" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>256</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="fileInfoLog"/>
+    </appender>
+
+    <appender name="ASYNC-ERROR" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>256</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="fileErrorLog"/>
+    </appender>
+    <root level="info">
+        <appender-ref ref="consoleLog" />
+        <appender-ref ref="fileInfoLog" />
+        <appender-ref ref="fileErrorLog" />
+    </root>
+</configuration>
+
+<!--
+<configuration>
+    &lt;!&ndash; 定义参数常量 &ndash;&gt;
+    &lt;!&ndash; 日志级别：TRACE<DEBUG<INFO<WARN<ERROR，其中常用的是DEBUG、INFO和ERROR &ndash;&gt;
+    <property name="log.level" value="ERROR" />
+    &lt;!&ndash; 文件保留时间   60天&ndash;&gt;
+    <property name="log.maxHistory" value="60" />
+    &lt;!&ndash; 日志存储路径 &ndash;&gt;
+    <property name="log.filePath" value="E:\\log" />
+&lt;!&ndash;    <property name="log.filePath" value="/opt/logs" />&ndash;&gt;
+    &lt;!&ndash; 日志的显式格式 &ndash;&gt;
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n"></property>
+
+    &lt;!&ndash; 用于说明输出介质，此处说明控制台输出 &ndash;&gt;
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        &lt;!&ndash; 类似于layout，除了将时间转化为数组，还会将转换后的数组输出到相应的文件中 &ndash;&gt;
+        <encoder>
+            &lt;!&ndash; 定义日志的输出格式 &ndash;&gt;
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    &lt;!&ndash; INFO，表示文件随着时间的推移按时间生成日志文件 &ndash;&gt;
+    <appender name="infoAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        &lt;!&ndash; 文件路径 &ndash;&gt;
+        <file>${log.filePath}/info.log</file>
+        &lt;!&ndash; 滚动策略 &ndash;&gt;
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            &lt;!&ndash; 设置文件名称 &ndash;&gt;
+            <fileNamePattern>
+                ${log.filePath}/info/info.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            &lt;!&ndash; 设置最大保存周期 &ndash;&gt;
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        &lt;!&ndash; 过滤器，过滤掉不是指定日志水平的日志 &ndash;&gt;
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            &lt;!&ndash; 设置日志级别 &ndash;&gt;
+            <level>INFO</level>
+            &lt;!&ndash; 如果跟该日志水平相匹配，则接受 &ndash;&gt;
+            <onMatch>ACCEPT</onMatch>
+            &lt;!&ndash; 如果跟该日志水平不匹配，则过滤掉 &ndash;&gt;
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    &lt;!&ndash; ERROR，表示文件随着时间的推移按时间生成日志文件 &ndash;&gt;
+    <appender name="errorAppender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        &lt;!&ndash; 文件路径 &ndash;&gt;
+        <file>${log.filePath}/error.log</file>
+        &lt;!&ndash; 滚动策略 &ndash;&gt;
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            &lt;!&ndash; 设置文件名称 &ndash;&gt;
+            <fileNamePattern>
+                ${log.filePath}/error/error.%d{yyyy-MM-dd}.log.gz
+            </fileNamePattern>
+            &lt;!&ndash; 设置最大保存周期 &ndash;&gt;
+            <MaxHistory>${log.maxHistory}</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        &lt;!&ndash; 过滤器，过滤掉不是指定日志水平的日志 &ndash;&gt;
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            &lt;!&ndash; 设置日志级别 &ndash;&gt;
+            <level>ERROR</level>
+            &lt;!&ndash; 如果跟该日志水平相匹配，则接受 &ndash;&gt;
+            <onMatch>ACCEPT</onMatch>
+            &lt;!&ndash; 如果跟该日志水平不匹配，则过滤掉 &ndash;&gt;
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    &lt;!&ndash; 用于存放日志对象，同时指定关联的package位置 &ndash;&gt;
+    &lt;!&ndash; name指定关联的package &ndash;&gt;
+    &lt;!&ndash; level表明指记录哪个日志级别以上的日志 &ndash;&gt;
+    &lt;!&ndash; appender-ref指定logger向哪个文件输出日志信息 &ndash;&gt;
+    &lt;!&ndash; additivity为true时，logger会把根logger的日志输出地址加入进来，但logger水平不依赖于根logger &ndash;&gt;
+    <logger name="com.iqc" additivity="true">
+        <appender-ref ref="infoAppender" />
+        <appender-ref ref="errorAppender" />
+    </logger>
+
+    &lt;!&ndash; 特殊的logger，根logger &ndash;&gt;
+    <root lever="INFO">
+        &lt;!&ndash; 指定默认的日志输出 &ndash;&gt;
+        <appender-ref ref="consoleAppender" />
+    </root>
+</configuration>-->

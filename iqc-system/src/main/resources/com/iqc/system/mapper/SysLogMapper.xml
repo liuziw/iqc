@@ -1,0 +1,1297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iqc.system.mapper.SysLogMapper">
+
+    <!--
+    /**
+     * 代码自动生成，请不要修改，切记！！！
+     */
+    -->
+
+    <sql id="selectAllPropertiesAsDO">
+            select  id id, username username, operation operation, method method, params params, time time, ip ip, is_deleted isDeleted, gmt_create gmtCreate, gmt_modified gmtModified from sys_log
+    </sql>
+
+    <sql id="selectByFieldNamesAsDO">
+       select <foreach collection="fieldNames" index="index" item="item"  separator=",">${item}</foreach> from sys_log
+    </sql>
+
+    <sql id="selectAsDO">
+        <choose>
+            <when test="fieldNames==null or fieldNames.length==0">
+                  <include refid="selectAllPropertiesAsDO"/>
+            </when>
+            <otherwise>
+                  <include refid="selectByFieldNamesAsDO"/>
+            </otherwise>
+        </choose>
+    </sql>
+
+
+    <select id="listAll" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" /> where is_deleted=0
+    </select>
+
+    <select id="mapAll" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" /> where is_deleted=0
+    </select>
+
+
+    <select id="getById" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" /> where id=#{id} and is_deleted=0
+    </select>
+
+
+    <select id="listByIds" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" /> where is_deleted=0 and id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </select>
+
+    <select id="mapByIds" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" /> where is_deleted=0 and id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </select>
+
+    <update id="deleteById">
+        update  sys_log set is_deleted=1,gmt_modified=CURRENT_TIMESTAMP where id=#{id}
+    </update>
+
+    <update id="deleteByIds">
+        update  sys_log set is_deleted=1,gmt_modified=CURRENT_TIMESTAMP where id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </update>
+
+
+    <update id="updateNotNullProperties">
+        update sys_log set
+                <if test="id != null">id=#{id},</if>
+                <if test="username != null">username=#{username},</if>
+                <if test="operation != null">operation=#{operation},</if>
+                <if test="method != null">method=#{method},</if>
+                <if test="params != null">params=#{params},</if>
+                <if test="time != null">time=#{time},</if>
+                <if test="ip != null">ip=#{ip},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+        where id=#{id}
+    </update>
+
+    <update id="updateAllProperties">
+        update sys_log set
+                id=#{id},
+                username=#{username},
+                operation=#{operation},
+                method=#{method},
+                params=#{params},
+                time=#{time},
+                ip=#{ip},
+                gmt_modified=CURRENT_TIMESTAMP
+        where id=#{id}
+    </update>
+
+
+    <insert id="insertAllProperties">
+              <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+                        SELECT LAST_INSERT_ID() as id
+                      </selectKey>
+
+        insert into sys_log
+        (
+                id,
+                username,
+                operation,
+                method,
+                params,
+                time,
+                ip,
+                is_deleted,gmt_create,gmt_modified
+        )
+        values
+        (
+                #{id},
+                #{username},
+                #{operation},
+                #{method},
+                #{params},
+                #{time},
+                #{ip},
+                0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+        )
+    </insert>
+
+
+    <insert id="insertNotNullProperties">
+                      <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+                                SELECT LAST_INSERT_ID() as id
+                              </selectKey>
+        insert into sys_log
+        (
+                <if test="id!=null">id,</if>
+                <if test="username!=null">username,</if>
+                <if test="operation!=null">operation,</if>
+                <if test="method!=null">method,</if>
+                <if test="params!=null">params,</if>
+                <if test="time!=null">time,</if>
+                <if test="ip!=null">ip,</if>
+                is_deleted,gmt_create,gmt_modified
+        )
+        values
+        (
+                <if test="id!=null">#{id},</if>
+                <if test="username!=null">#{username},</if>
+                <if test="operation!=null">#{operation},</if>
+                <if test="method!=null">#{method},</if>
+                <if test="params!=null">#{params},</if>
+                <if test="time!=null">#{time},</if>
+                <if test="ip!=null">#{ip},</if>
+                0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+        )
+    </insert>
+
+        <insert id="insertAllPropertiesList">
+           insert into sys_log
+           (
+                   id,
+                   username,
+                   operation,
+                   method,
+                   params,
+                   time,
+                   ip,
+                   is_deleted,gmt_create,gmt_modified
+                   )
+           values
+           <foreach collection="list" item="item" index="index" separator="," >
+           (
+                   #{item.id},
+                   #{item.username},
+                   #{item.operation},
+                   #{item.method},
+                   #{item.params},
+                   #{item.time},
+                   #{item.ip},
+                   0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+           )
+           </foreach>
+       </insert>
+
+
+
+    <select id="listByProperty" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+    <select id="countByProperty" resultType="java.lang.Integer">
+        select count(1) from sys_log
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+    <select id="mapByProperty" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+
+    <update id="updateNotNullFieldsByProperty">
+        update sys_log set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <update id="updateAllFieldsByProperty">
+        update sys_log set
+                id=#{updateDO.id},
+                username=#{updateDO.username},
+                operation=#{updateDO.operation},
+                method=#{updateDO.method},
+                params=#{updateDO.params},
+                time=#{updateDO.time},
+                ip=#{updateDO.ip},
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <update id="deleteByProperty">
+        update sys_log set
+                is_delete=1,
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <select id="listByProperties" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and  ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <select id="countByProperties" resultType="java.lang.Integer">
+        select count(1) from sys_log
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <select id="mapByProperties" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and  ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <update id="updateNotNullFieldsByProperties">
+        update sys_log set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <update id="updateAllFieldsByProperties">
+        update sys_log set
+                id=#{updateDO.id}
+                username=#{updateDO.username}
+                operation=#{updateDO.operation}
+                method=#{updateDO.method}
+                params=#{updateDO.params}
+                time=#{updateDO.time}
+                ip=#{updateDO.ip}
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <update id="deleteByProperties">
+        update sys_log set
+                is_deleted=1,
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <select id="_listByQueryItems" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+    <select id="_mapByQueryItems" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+    <select id="_countByQueryItems" resultType="java.lang.Integer">
+        select count(1) from sys_log
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+   <update id="_updateNotNullFieldsByQueryItems">
+         update sys_log set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <update id="_updateNotAllFieldsByQueryItems">
+         update sys_log set
+                id=#{updateDO.id}
+                username=#{updateDO.username}
+                operation=#{updateDO.operation}
+                method=#{updateDO.method}
+                params=#{updateDO.params}
+                time=#{updateDO.time}
+                ip=#{updateDO.ip}
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <update id="_deleteByQueryItems">
+         update sys_log set
+                is_deleted=1,
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <select id="_listByPageQuery" resultType="com.iqc.system.dbo.SysLogDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                         #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+            <if test="pageQuery.sortFieldNameForDatabase!=null">
+                order by ${pageQuery.sortFieldNameForDatabase} ${pageQuery.sortType}
+            </if>
+            limit #{values.pageOffset},#{pageQuery.pageSize}
+    </select>
+
+
+    <select id="_countByPageQuery" resultType="java.lang.Integer">
+        select count(1) from sys_log
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                    <choose>
+                        <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                            <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                                #{inItem}
+                            </foreach>
+                        </when>
+                        <otherwise>
+                           #{values.[${item.valueKeyName}]}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+    </select>
+
+
+
+          <select id="listById" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and id=#{id}
+          </select>
+
+          <select id="countById" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and id=#{id}
+           </select>
+
+           <select id="mapById" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and id=#{id}
+           </select>
+
+           <update id="updateNotNullFieldsById">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and id=#{id}
+          </update>
+
+          <update id="updateAllFieldsById">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and id=#{id}
+            </update>
+
+
+
+
+            <!--property in -->
+
+         <select id="listByInId" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and id in
+                  <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInId" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and id in
+                      <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInId" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and id in
+                        <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInId">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and id in
+                       <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInId">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and id in
+                       <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInId">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and id in
+                        <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByUsername" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and username=#{username}
+          </select>
+
+          <select id="countByUsername" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and username=#{username}
+           </select>
+
+           <select id="mapByUsername" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and username=#{username}
+           </select>
+
+           <update id="updateNotNullFieldsByUsername">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and username=#{username}
+          </update>
+
+          <update id="updateAllFieldsByUsername">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and username=#{username}
+            </update>
+
+
+            <update id="deleteByUsername">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and username=#{username}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInUsername" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and username in
+                  <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInUsername" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and username in
+                      <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInUsername" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and username in
+                        <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInUsername">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and username in
+                       <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInUsername">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and username in
+                       <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInUsername">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and username in
+                        <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByOperation" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and operation=#{operation}
+          </select>
+
+          <select id="countByOperation" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and operation=#{operation}
+           </select>
+
+           <select id="mapByOperation" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and operation=#{operation}
+           </select>
+
+           <update id="updateNotNullFieldsByOperation">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and operation=#{operation}
+          </update>
+
+          <update id="updateAllFieldsByOperation">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and operation=#{operation}
+            </update>
+
+
+            <update id="deleteByOperation">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and operation=#{operation}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInOperation" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and operation in
+                  <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInOperation" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and operation in
+                      <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInOperation" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and operation in
+                        <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInOperation">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and operation in
+                       <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInOperation">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and operation in
+                       <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInOperation">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and operation in
+                        <foreach collection="operationList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByMethod" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and method=#{method}
+          </select>
+
+          <select id="countByMethod" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and method=#{method}
+           </select>
+
+           <select id="mapByMethod" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and method=#{method}
+           </select>
+
+           <update id="updateNotNullFieldsByMethod">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and method=#{method}
+          </update>
+
+          <update id="updateAllFieldsByMethod">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and method=#{method}
+            </update>
+
+
+            <update id="deleteByMethod">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and method=#{method}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInMethod" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and method in
+                  <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInMethod" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and method in
+                      <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInMethod" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and method in
+                        <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInMethod">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and method in
+                       <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInMethod">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and method in
+                       <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInMethod">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and method in
+                        <foreach collection="methodList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByParams" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and params=#{params}
+          </select>
+
+          <select id="countByParams" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and params=#{params}
+           </select>
+
+           <select id="mapByParams" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and params=#{params}
+           </select>
+
+           <update id="updateNotNullFieldsByParams">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and params=#{params}
+          </update>
+
+          <update id="updateAllFieldsByParams">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and params=#{params}
+            </update>
+
+
+            <update id="deleteByParams">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and params=#{params}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInParams" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and params in
+                  <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInParams" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and params in
+                      <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInParams" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and params in
+                        <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInParams">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and params in
+                       <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInParams">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and params in
+                       <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInParams">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and params in
+                        <foreach collection="paramsList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByTime" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and time=#{time}
+          </select>
+
+          <select id="countByTime" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and time=#{time}
+           </select>
+
+           <select id="mapByTime" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and time=#{time}
+           </select>
+
+           <update id="updateNotNullFieldsByTime">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and time=#{time}
+          </update>
+
+          <update id="updateAllFieldsByTime">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and time=#{time}
+            </update>
+
+
+            <update id="deleteByTime">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and time=#{time}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInTime" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and time in
+                  <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInTime" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and time in
+                      <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInTime" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and time in
+                        <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInTime">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and time in
+                       <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInTime">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and time in
+                       <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInTime">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and time in
+                        <foreach collection="timeList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByIp" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and ip=#{ip}
+          </select>
+
+          <select id="countByIp" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and ip=#{ip}
+           </select>
+
+           <select id="mapByIp" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and ip=#{ip}
+           </select>
+
+           <update id="updateNotNullFieldsByIp">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and ip=#{ip}
+          </update>
+
+          <update id="updateAllFieldsByIp">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and ip=#{ip}
+            </update>
+
+
+            <update id="deleteByIp">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and ip=#{ip}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInIp" resultType="com.iqc.system.dbo.SysLogDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and ip in
+                  <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInIp" resultType="java.lang.Integer">
+                select count(1) from sys_log
+                where is_deleted=0 and ip in
+                      <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInIp" resultType="com.iqc.system.dbo.SysLogDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and ip in
+                        <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInIp">
+              update sys_log set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.operation != null">operation=#{updateDO.operation},</if>
+                      <if test="updateDO.method != null">method=#{updateDO.method},</if>
+                      <if test="updateDO.params != null">params=#{updateDO.params},</if>
+                      <if test="updateDO.time != null">time=#{updateDO.time},</if>
+                      <if test="updateDO.ip != null">ip=#{updateDO.ip},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and ip in
+                       <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInIp">
+                update sys_log set
+                        id=#{updateDO.id},
+                        username=#{updateDO.username},
+                        operation=#{updateDO.operation},
+                        method=#{updateDO.method},
+                        params=#{updateDO.params},
+                        time=#{updateDO.time},
+                        ip=#{updateDO.ip},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and ip in
+                       <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInIp">
+                update sys_log set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and ip in
+                        <foreach collection="ipList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+
+</mapper>
+

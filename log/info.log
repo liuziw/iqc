@@ -1,0 +1,24 @@
+2019-08-12 09:41:03.322 [main] INFO  com.iqc.IqcApiApplication-Starting IqcApiApplication on Yct201907311809 with PID 8636 (E:\workSpace\iqc\iqc-api\target\classes started by Administrator in E:\workSpace\iqc)
+2019-08-12 09:41:03.323 [main] INFO  com.iqc.IqcApiApplication-No active profile set, falling back to default profiles: default
+2019-08-12 09:41:08.758 [main] INFO  com.iqc.IqcApiApplication-Started IqcApiApplication in 5.693 seconds (JVM running for 6.415)
+2019-08-12 09:46:45.588 [http-nio-8080-exec-2] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC2/iqc-api/swagger-resources/configuration/uiGET{}<200 OK,springfox.documentation.swagger.web.UiConfiguration@728e5077,{}>
+2019-08-12 09:46:45.670 [http-nio-8080-exec-10] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC0/iqc-api/swagger-resourcesGET{}<200 OK,[springfox.documentation.swagger.web.SwaggerResource@4718ce70],{}>
+2019-08-12 09:46:45.857 [http-nio-8080-exec-4] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC1/iqc-api/swagger-resources/configuration/securityGET{}<200 OK,springfox.documentation.swagger.web.SecurityConfiguration@4ace4cd1,{}>
+2019-08-12 09:48:15.532 [main] INFO  com.iqc.IqcApiApplication-Starting IqcApiApplication on Yct201907311809 with PID 7180 (E:\workSpace\iqc\iqc-api\target\classes started by Administrator in E:\workSpace\iqc)
+2019-08-12 09:48:15.533 [main] INFO  com.iqc.IqcApiApplication-No active profile set, falling back to default profiles: default
+2019-08-12 09:48:20.626 [main] INFO  com.iqc.IqcApiApplication-Started IqcApiApplication in 5.35 seconds (JVM running for 6.045)
+2019-08-12 09:48:39.802 [http-nio-8080-exec-1] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC3/iqc-api/swagger-resources/configuration/uiGET{}<200 OK,springfox.documentation.swagger.web.UiConfiguration@faf53f4,{}>
+2019-08-12 09:48:39.833 [http-nio-8080-exec-3] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC0/iqc-api/swagger-resourcesGET{}<200 OK,[springfox.documentation.swagger.web.SwaggerResource@4890fc0d],{}>
+2019-08-12 09:48:39.924 [http-nio-8080-exec-8] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC1/iqc-api/swagger-resources/configuration/securityGET{}<200 OK,springfox.documentation.swagger.web.SecurityConfiguration@1829f4b1,{}>
+2019-08-12 09:48:50.928 [http-nio-8080-exec-2] INFO  com.iqc.api.web.controller.system.UserController-测试日志：0
+2019-08-12 09:48:50.928 [http-nio-8080-exec-2] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC5/iqc-api/api/user/testPOST{TestDTO(id=0)}null
+2019-08-12 09:49:34.452 [main] INFO  com.iqc.IqcApiApplication-Starting IqcApiApplication on Yct201907311809 with PID 3684 (E:\workSpace\iqc\iqc-api\target\classes started by Administrator in E:\workSpace\iqc)
+2019-08-12 09:49:34.453 [main] INFO  com.iqc.IqcApiApplication-No active profile set, falling back to default profiles: default
+2019-08-12 09:49:39.607 [main] INFO  com.iqc.IqcApiApplication-Started IqcApiApplication in 5.422 seconds (JVM running for 6.156)
+2019-08-12 09:49:53.615 [main] INFO  com.iqc.IqcApiApplication-Starting IqcApiApplication on Yct201907311809 with PID 8480 (E:\workSpace\iqc\iqc-api\target\classes started by Administrator in E:\workSpace\iqc)
+2019-08-12 09:49:53.616 [main] INFO  com.iqc.IqcApiApplication-No active profile set, falling back to default profiles: default
+2019-08-12 09:49:58.736 [main] INFO  com.iqc.IqcApiApplication-Started IqcApiApplication in 5.372 seconds (JVM running for 6.03)
+2019-08-12 09:50:08.803 [http-nio-8080-exec-1] INFO  com.iqc.api.web.controller.system.UserController-测试日志：0
+2019-08-12 09:50:08.803 [http-nio-8080-exec-1] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC2/iqc-api/api/user/testPOST{TestDTO(id=0)}null
+2019-08-12 09:52:00.365 [http-nio-8080-exec-3] INFO  com.iqc.api.web.controller.system.UserController-测试日志：0
+2019-08-12 09:52:10.081 [http-nio-8080-exec-3] INFO  com.iqc.common.core.web.aop.ControllerLoggerAspect-SUCC10691/iqc-api/api/user/testPOST{TestDTO(id=0)}null

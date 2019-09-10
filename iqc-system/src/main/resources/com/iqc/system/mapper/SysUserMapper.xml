@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iqc.system.mapper.SysUserMapper">
+
+    <!--
+    /**
+     * 代码自动生成，请不要修改，切记！！！
+     */
+    -->
+
+    <sql id="selectAllPropertiesAsDO">
+            select  id id, name name, username username, password password, orgid orgid, status status, is_deleted isDeleted, gmt_create gmtCreate, gmt_modified gmtModified from sys_user
+    </sql>
+
+    <sql id="selectByFieldNamesAsDO">
+       select <foreach collection="fieldNames" index="index" item="item"  separator=",">${item}</foreach> from sys_user
+    </sql>
+
+    <sql id="selectAsDO">
+        <choose>
+            <when test="fieldNames==null or fieldNames.length==0">
+                  <include refid="selectAllPropertiesAsDO"/>
+            </when>
+            <otherwise>
+                  <include refid="selectByFieldNamesAsDO"/>
+            </otherwise>
+        </choose>
+    </sql>
+
+
+    <select id="listAll" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" /> where is_deleted=0
+    </select>
+
+    <select id="mapAll" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" /> where is_deleted=0
+    </select>
+
+
+    <select id="getById" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" /> where id=#{id} and is_deleted=0
+    </select>
+
+
+    <select id="listByIds" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" /> where is_deleted=0 and id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </select>
+
+    <select id="mapByIds" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" /> where is_deleted=0 and id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </select>
+
+    <update id="deleteById">
+        update  sys_user set is_deleted=1,gmt_modified=CURRENT_TIMESTAMP where id=#{id}
+    </update>
+
+    <update id="deleteByIds">
+        update  sys_user set is_deleted=1,gmt_modified=CURRENT_TIMESTAMP where id in (<foreach collection="ids" index="index" item="item"  separator=",">#{item}</foreach>)
+    </update>
+
+
+    <update id="updateNotNullProperties">
+        update sys_user set
+                <if test="id != null">id=#{id},</if>
+                <if test="name != null">name=#{name},</if>
+                <if test="username != null">username=#{username},</if>
+                <if test="password != null">password=#{password},</if>
+                <if test="orgid != null">orgid=#{orgid},</if>
+                <if test="status != null">status=#{status},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+        where id=#{id}
+    </update>
+
+    <update id="updateAllProperties">
+        update sys_user set
+                id=#{id},
+                name=#{name},
+                username=#{username},
+                password=#{password},
+                orgid=#{orgid},
+                status=#{status},
+                gmt_modified=CURRENT_TIMESTAMP
+        where id=#{id}
+    </update>
+
+
+    <insert id="insertAllProperties">
+              <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+                        SELECT LAST_INSERT_ID() as id
+                      </selectKey>
+
+        insert into sys_user
+        (
+                id,
+                name,
+                username,
+                password,
+                orgid,
+                status,
+                is_deleted,gmt_create,gmt_modified
+        )
+        values
+        (
+                #{id},
+                #{name},
+                #{username},
+                #{password},
+                #{orgid},
+                #{status},
+                0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+        )
+    </insert>
+
+
+    <insert id="insertNotNullProperties">
+                      <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+                                SELECT LAST_INSERT_ID() as id
+                              </selectKey>
+        insert into sys_user
+        (
+                <if test="id!=null">id,</if>
+                <if test="name!=null">name,</if>
+                <if test="username!=null">username,</if>
+                <if test="password!=null">password,</if>
+                <if test="orgid!=null">orgid,</if>
+                <if test="status!=null">status,</if>
+                is_deleted,gmt_create,gmt_modified
+        )
+        values
+        (
+                <if test="id!=null">#{id},</if>
+                <if test="name!=null">#{name},</if>
+                <if test="username!=null">#{username},</if>
+                <if test="password!=null">#{password},</if>
+                <if test="orgid!=null">#{orgid},</if>
+                <if test="status!=null">#{status},</if>
+                0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+        )
+    </insert>
+
+        <insert id="insertAllPropertiesList">
+           insert into sys_user
+           (
+                   id,
+                   name,
+                   username,
+                   password,
+                   orgid,
+                   status,
+                   is_deleted,gmt_create,gmt_modified
+                   )
+           values
+           <foreach collection="list" item="item" index="index" separator="," >
+           (
+                   #{item.id},
+                   #{item.name},
+                   #{item.username},
+                   #{item.password},
+                   #{item.orgid},
+                   #{item.status},
+                   0,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+           )
+           </foreach>
+       </insert>
+
+
+
+    <select id="listByProperty" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+    <select id="countByProperty" resultType="java.lang.Integer">
+        select count(1) from sys_user
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+    <select id="mapByProperty" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0 and ${propertyName}=#{value}
+    </select>
+
+
+    <update id="updateNotNullFieldsByProperty">
+        update sys_user set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <update id="updateAllFieldsByProperty">
+        update sys_user set
+                id=#{updateDO.id},
+                name=#{updateDO.name},
+                username=#{updateDO.username},
+                password=#{updateDO.password},
+                orgid=#{updateDO.orgid},
+                status=#{updateDO.status},
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <update id="deleteByProperty">
+        update sys_user set
+                is_delete=1,
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0 and ${propertyName}=#{value}
+    </update>
+
+    <select id="listByProperties" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and  ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <select id="countByProperties" resultType="java.lang.Integer">
+        select count(1) from sys_user
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <select id="mapByProperties" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="propertyNames" item="propertyName" index="index">
+              and  ${propertyName}=#{values.[${index}]}
+            </foreach>
+    </select>
+
+    <update id="updateNotNullFieldsByProperties">
+        update sys_user set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <update id="updateAllFieldsByProperties">
+        update sys_user set
+                id=#{updateDO.id}
+                name=#{updateDO.name}
+                username=#{updateDO.username}
+                password=#{updateDO.password}
+                orgid=#{updateDO.orgid}
+                status=#{updateDO.status}
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <update id="deleteByProperties">
+        update sys_user set
+                is_deleted=1,
+                gmt_modified=CURRENT_TIMESTAMP
+         where is_deleted=0
+         <foreach collection="propertyNames" item="propertyName" index="index">
+           and  ${propertyName}=#{values.[${index}]}
+         </foreach>
+    </update>
+
+    <select id="_listByQueryItems" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+    <select id="_mapByQueryItems" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+    <select id="_countByQueryItems" resultType="java.lang.Integer">
+        select count(1) from sys_user
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </select>
+
+   <update id="_updateNotNullFieldsByQueryItems">
+         update sys_user set
+                <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <update id="_updateNotAllFieldsByQueryItems">
+         update sys_user set
+                id=#{updateDO.id}
+                name=#{updateDO.name}
+                username=#{updateDO.username}
+                password=#{updateDO.password}
+                orgid=#{updateDO.orgid}
+                status=#{updateDO.status}
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <update id="_deleteByQueryItems">
+         update sys_user set
+                is_deleted=1,
+                gmt_modified=CURRENT_TIMESTAMP
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                          #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+    </update>
+
+    <select id="_listByPageQuery" resultType="com.iqc.system.dbo.SysUserDO">
+        <include refid="selectAsDO" />
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                  <choose>
+                      <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                          <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                              #{inItem}
+                          </foreach>
+                      </when>
+                      <otherwise>
+                         #{values.[${item.valueKeyName}]}
+                      </otherwise>
+                  </choose>
+              </if>
+            </foreach>
+            <if test="pageQuery.sortFieldNameForDatabase!=null">
+                order by ${pageQuery.sortFieldNameForDatabase} ${pageQuery.sortType}
+            </if>
+            limit #{values.pageOffset},#{pageQuery.pageSize}
+    </select>
+
+
+    <select id="_countByPageQuery" resultType="java.lang.Integer">
+        select count(1) from sys_user
+            where is_deleted=0
+            <foreach collection="items" item="item" index="index">
+              and  ${item.fieldName} ${item.type.optr}
+              <if test="item.type.hasValue">
+                    <choose>
+                        <when test="item.type.optr=='in' || item.type.optr=='not in'">
+                            <foreach collection="values[item.valueKeyName]" item="inItem" close=")" open="(" separator=",">
+                                #{inItem}
+                            </foreach>
+                        </when>
+                        <otherwise>
+                           #{values.[${item.valueKeyName}]}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+    </select>
+
+
+
+          <select id="listById" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and id=#{id}
+          </select>
+
+          <select id="countById" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and id=#{id}
+           </select>
+
+           <select id="mapById" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and id=#{id}
+           </select>
+
+           <update id="updateNotNullFieldsById">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and id=#{id}
+          </update>
+
+          <update id="updateAllFieldsById">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and id=#{id}
+            </update>
+
+
+
+
+            <!--property in -->
+
+         <select id="listByInId" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and id in
+                  <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInId" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and id in
+                      <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInId" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and id in
+                        <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInId">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and id in
+                       <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInId">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and id in
+                       <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInId">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and id in
+                        <foreach collection="idList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByName" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and name=#{name}
+          </select>
+
+          <select id="countByName" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and name=#{name}
+           </select>
+
+           <select id="mapByName" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and name=#{name}
+           </select>
+
+           <update id="updateNotNullFieldsByName">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and name=#{name}
+          </update>
+
+          <update id="updateAllFieldsByName">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and name=#{name}
+            </update>
+
+
+            <update id="deleteByName">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and name=#{name}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInName" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and name in
+                  <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInName" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and name in
+                      <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInName" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and name in
+                        <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInName">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and name in
+                       <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInName">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and name in
+                       <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInName">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and name in
+                        <foreach collection="nameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByUsername" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and username=#{username}
+          </select>
+
+          <select id="countByUsername" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and username=#{username}
+           </select>
+
+           <select id="mapByUsername" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and username=#{username}
+           </select>
+
+           <update id="updateNotNullFieldsByUsername">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and username=#{username}
+          </update>
+
+          <update id="updateAllFieldsByUsername">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and username=#{username}
+            </update>
+
+
+            <update id="deleteByUsername">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and username=#{username}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInUsername" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and username in
+                  <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInUsername" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and username in
+                      <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInUsername" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and username in
+                        <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInUsername">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and username in
+                       <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInUsername">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and username in
+                       <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInUsername">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and username in
+                        <foreach collection="usernameList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByPassword" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and password=#{password}
+          </select>
+
+          <select id="countByPassword" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and password=#{password}
+           </select>
+
+           <select id="mapByPassword" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and password=#{password}
+           </select>
+
+           <update id="updateNotNullFieldsByPassword">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and password=#{password}
+          </update>
+
+          <update id="updateAllFieldsByPassword">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and password=#{password}
+            </update>
+
+
+            <update id="deleteByPassword">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and password=#{password}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInPassword" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and password in
+                  <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInPassword" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and password in
+                      <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInPassword" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and password in
+                        <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInPassword">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and password in
+                       <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInPassword">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and password in
+                       <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInPassword">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and password in
+                        <foreach collection="passwordList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByOrgid" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and orgid=#{orgid}
+          </select>
+
+          <select id="countByOrgid" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and orgid=#{orgid}
+           </select>
+
+           <select id="mapByOrgid" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and orgid=#{orgid}
+           </select>
+
+           <update id="updateNotNullFieldsByOrgid">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and orgid=#{orgid}
+          </update>
+
+          <update id="updateAllFieldsByOrgid">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and orgid=#{orgid}
+            </update>
+
+
+            <update id="deleteByOrgid">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and orgid=#{orgid}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInOrgid" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and orgid in
+                  <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInOrgid" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and orgid in
+                      <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInOrgid" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and orgid in
+                        <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInOrgid">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and orgid in
+                       <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInOrgid">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and orgid in
+                       <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInOrgid">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and orgid in
+                        <foreach collection="orgidList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+          <select id="listByStatus" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and status=#{status}
+          </select>
+
+          <select id="countByStatus" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and status=#{status}
+           </select>
+
+           <select id="mapByStatus" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                  where is_deleted=0 and status=#{status}
+           </select>
+
+           <update id="updateNotNullFieldsByStatus">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+               where is_deleted=0 and status=#{status}
+          </update>
+
+          <update id="updateAllFieldsByStatus">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and status=#{status}
+            </update>
+
+
+            <update id="deleteByStatus">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                 where is_deleted=0 and status=#{status}
+            </update>
+
+
+
+            <!--property in -->
+
+         <select id="listByInStatus" resultType="com.iqc.system.dbo.SysUserDO">
+              <include refid="selectAsDO" />
+                  where is_deleted=0 and status in
+                  <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                      #{inItem}
+                  </foreach>
+          </select>
+
+          <select id="countByInStatus" resultType="java.lang.Integer">
+                select count(1) from sys_user
+                where is_deleted=0 and status in
+                      <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                          #{inItem}
+                      </foreach>
+           </select>
+
+           <select id="mapByInStatus" resultType="com.iqc.system.dbo.SysUserDO">
+                <include refid="selectAsDO" />
+                    where is_deleted=0 and status in
+                        <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+           </select>
+
+           <update id="updateNotNullFieldsByInStatus">
+              update sys_user set
+                      <if test="updateDO.id != null">id=#{updateDO.id},</if>
+                      <if test="updateDO.name != null">name=#{updateDO.name},</if>
+                      <if test="updateDO.username != null">username=#{updateDO.username},</if>
+                      <if test="updateDO.password != null">password=#{updateDO.password},</if>
+                      <if test="updateDO.orgid != null">orgid=#{updateDO.orgid},</if>
+                      <if test="updateDO.status != null">status=#{updateDO.status},</if>
+                      gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and status in
+                       <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+          </update>
+
+          <update id="updateAllFieldsByInStatus">
+                update sys_user set
+                        id=#{updateDO.id},
+                        name=#{updateDO.name},
+                        username=#{updateDO.username},
+                        password=#{updateDO.password},
+                        orgid=#{updateDO.orgid},
+                        status=#{updateDO.status},
+                        gmt_modified=CURRENT_TIMESTAMP
+                   where is_deleted=0 and status in
+                       <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                           #{inItem}
+                       </foreach>
+            </update>
+
+            <update id="deleteByInStatus">
+                update sys_user set
+                        is_deleted=1,
+                        gmt_modified=CURRENT_TIMESTAMP
+                    where is_deleted=0 and status in
+                        <foreach collection="statusList" item="inItem" close=")" open="(" separator=",">
+                            #{inItem}
+                        </foreach>
+            </update>
+
+</mapper>
+
